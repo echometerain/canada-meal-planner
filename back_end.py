@@ -46,6 +46,7 @@ def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactati
     daily_n = np.intersect1d(comp_names, np.unique(daily["Components"]))
     percent_e_n = np.intersect1d(comp_names, percent_e["Components"])
     output = {}
+    output_pe = {}
     ptype = ""
     age_i = 0
     if pregnant or lactating:
@@ -73,7 +74,6 @@ def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactati
         min_diff = np.nan
         good_diff = np.nan
         max_diff = np.nan
-        print(nu_dict[e][2])
         if "Min" in mgm.index:
             min_diff = convert_units(
                 nu_dict[e][2], mgm.at["Min", "Unit"], nu_dict[e][1]) - mgm.at["Min", ptype]
@@ -84,17 +84,25 @@ def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactati
             max_diff = convert_units(
                 nu_dict[e][2], mgm.at["Max", "Unit"], nu_dict[e][1]) - mgm.at["Max", ptype]
         output[e] = (min_diff, good_diff, max_diff)
-    return output
+    for e in percent_e_n:
+        mm = percent_e.loc[percent_e["Components"] == e].set_index("Type")
+        min_diff = get_e_percent(
+            nu_dict["Energy"][1], nu_dict[e][1], e) - mm.at["Min", ptype]
+        max_diff = get_e_percent(
+            nu_dict["Energy"][1], nu_dict[e][1], e) - mm.at["Max", ptype]
+        output_pe[e] = (min_diff, max_diff)
+
+    return output, output_pe
 
 
-def convert_units(from_unit: str, to_unit: str, amount: np.double) -> float:  # for check_daily only
+def convert_units(from_unit: str, to_unit: str, amount: np.double) -> np.double:  # for check_daily only
     return amount * units[to_unit] / units[from_unit]
 
 
-def get_e_percent(energy: np.double, amount: np.double, kcal_type: str):
-    if kcal_type == "Protein" or kcal_type == "carbs":
+def get_e_percent(energy: np.double, amount: np.double, kcal_type: str) -> np.double:
+    if kcal_type == "Total Protein" or kcal_type == "Total Carbohydrate":
         return amount*4/energy
-    elif kcal_type == "Fat":
+    elif kcal_type == "Total Fat":
         return amount/energy
 
 
@@ -124,7 +132,5 @@ def get_nutrients(plan: dict) -> dict:
     return output
 
 
-# print(np.unique(daily.Components))
-
 print(check_daily(get_nutrients(
-    {fuzzy_match("fish")[0]: 500}), 25, True, False, True))
+    {fuzzy_match("fish")[0]: 5000}), 25, True, False, True))

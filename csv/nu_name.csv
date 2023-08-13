@@ -1,7 +1,7 @@
 NutrientID,NutrientUnit,NutrientName,NutrientNameF,NutrientDecimals
 203,g,Total Protein,Protéines,2
 204,g,Total Fat,Lipides Totaux,2
-205,g,Carbohydrate,Glucides Totaux (Par Différence),2
+205,g,Total Carbohydrate,Glucides Totaux (Par Différence),2
 207,g,"Ash, Total","Cendres, Totales",2
 208,kCal,Energy,Énergie (Kilocalories),0
 810,g,Starch,Amidon,2
