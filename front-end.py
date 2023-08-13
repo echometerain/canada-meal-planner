@@ -17,7 +17,6 @@ app.title("Canada Meal Planner")
 def search_entered(search_term):
     # when the search button is entered, this function gets called,
     # which will get the data from the backend, and then forward it to the planner and some such function
-    print(search_term)
     food_name = ""
     return food_name
 
@@ -25,11 +24,9 @@ def search_entered(search_term):
 def regenerate_planner(plans: dict):
     # fill planner_scrollable_frame with that days entries, or placeholder text if there are none.
     for planner_item in planner_scrollable_frame.grid_slaves():
+        if len(planner_scrollable_frame.grid_slaves()) == 1:
+            break
         planner_item.grid_forget()
-    if plans:
-        pass
-    else:
-        placeholder_planner_label.grid(column=0, row=0)
 
 
 def switch_day(day):
@@ -47,11 +44,14 @@ search_bar.bind("<Return>", lambda e: search_entered(search_bar.get()))
 
 # Calender
 calender_frame = ctk.CTkFrame(app)
+calender_month_frame = ctk.CTkFrame(calender_frame, height=30)
+calender_month_label = ctk.CTkLabel(calender_month_frame, text=month_lookup[month_current - 1])
+calender_days_frame = ctk.CTkFrame(calender_frame)
 i = 0
 buttons = []
 for z in range(35):
     i += 1
-    button = ctk.CTkButton(calender_frame, text=str(i), command=lambda day=i: switch_day(day))
+    button = ctk.CTkButton(calender_days_frame, text=str(i), command=lambda day=i: switch_day(day))
     button.configure(width=50, height=50)
     button.grid(column=z % 7, row=z // 7, padx=1, pady=1)
     if z % 7 == 6:
@@ -70,7 +70,6 @@ for z in range(35):
 planner_frame = ctk.CTkFrame(app)
 current_date_label = ctk.CTkLabel(planner_frame, text=f"{month_lookup[month_current - 1]} {day_current}")
 planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame, height=400)
-placeholder_planner_label = ctk.CTkLabel(planner_scrollable_frame, text="You haven't planned out any meals for today. Why not now!")
 
 hours = []
 for i in range(6):
@@ -86,6 +85,9 @@ app.grid_columnconfigure(0, weight=1)
 app.grid_columnconfigure(1, weight=5)
 app.grid_rowconfigure(0, weight=1)
 app.grid_rowconfigure(1, weight=1)
+calender_month_frame.grid(column=0, row=0)
+calender_month_label.grid(column=1, row=0)
+calender_days_frame.grid(column=0, row=1)
 calender_frame.grid(column=0, row=1, sticky='ne')
 search_bar.grid(column=1, row=0, padx=30, pady=10, sticky='ws')
 planner_frame.grid_columnconfigure(0, weight=1)
