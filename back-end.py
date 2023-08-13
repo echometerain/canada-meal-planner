@@ -33,8 +33,12 @@ def check_daily(nu_dict: dict) -> dict:
     True
 
 
-def convert_units(from_unit: str, to_unit: str, amount: float) -> float:  # for check_daily only
-    True
+def convert_units(from_unit: str, to_unit: str, amount: float, kcal_type: str) -> float:  # for check_daily only
+    if to_unit == "kCal":
+        if kcal_type == "Protein" or kcal_type == "carbs":
+            return amount*4
+        elif kcal_type == "Fat":
+            return amount
 
 
 def get_nutrients(plan: dict) -> dict:
