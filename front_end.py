@@ -1,6 +1,8 @@
 import customtkinter as ctk
 import datetime, calendar
 from enum import StrEnum
+from PIL import Image
+import os
 import json
 import configparser
 import back_end
@@ -33,7 +35,7 @@ month_lookup = ["January", "February", "March", "April", "May", "June", "July", 
 app = ctk.CTk()
 app.geometry("960x540")
 app.title("Canada Meal Planner")
-app.iconbitmap('./images/cmp logo.ico')
+app.iconbitmap(os.path.join("./images/cmp logo.ico"))
 planner_selected = None
 
 
@@ -111,8 +113,11 @@ def change_day(day=day_current):
 
 
 # Search Bar
+Icon = ctk.CTkImage(light_image = Image.open(os.path.join("images/cmp64.png")))
+label = ctk.CTkLabel(master=app, image=Icon)
+label.grid(column=0, row=0)
 search_frame = ctk.CTkFrame(app)
-search_entry = ctk.CTkEntry(search_frame, placeholder_text="What do you plan on eating this day?", fg_color='#FA5151',
+search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..", fg_color='#FA5151',
                             border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
 search_entry.bind("<Return>", lambda e: search_entered(search_entry.get()))
 search_submit_button = ctk.CTkButton(search_frame, text="Add")
