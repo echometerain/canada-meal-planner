@@ -6,10 +6,8 @@ from typing import List
 merged = pd.read_csv("./csv/merged.csv").set_index("FoodDescription")
 nu_names = pd.read_csv("./csv/nu_name.csv").set_index("NutrientID")
 nu_amounts = pd.read_csv("./csv/nu_amount.csv")
+percent_e = pd.read_csv("./csv/percent_e.csv").set_index("Components")
 daily = pd.read_csv("./csv/daily.csv")
-units = {
-    # Unit: micrograms amount
-}
 
 
 def fuzzy_match(st: str) -> List[int]:
@@ -35,23 +33,34 @@ def check_daily(nu_dict: dict) -> dict:
     True
 
 
-def convert_units(from_unit: str, to_unit: str, amount: float) -> float:
+def convert_units(from_unit: str, to_unit: str, amount: float) -> float:  # for check_daily only
     True
 
 
 def get_nutrients(plan: dict) -> dict:
     """
     Args:
-        plan (dict): day plan {food name: (amount, units)}
+        plan (dict): day plan {food name: amount in grams}
 
     Returns:
-        dict: {nutrient name: amount in micrograms}
+        dict: {nutrient en name: (fr name, amount, unit)}
     """
     output = {}
     for k, v in plan.items():
-        for _, row in nu_amounts.loc[nu_amounts.FoodID == merged.at[k, "FoodID"]]:
-            nu_name = nu_names.at[row["NutrientID"], "NutrientName"]
-            unit = nu_names.at[row["NutrientID"], "NutrientUnit"]
-            nu_amount = v[1]*convert_units()
+        rows = nu_amounts.loc[nu_amounts.FoodID == merged.at[k, "FoodID"]]
+        for i in range(rows.shape[0]):
+            nu_name = nu_names.at[rows.iloc[i]["NutrientID"], "NutrientName"]
+            nu_name_fr = nu_names.at[rows.iloc[i]
+                                     ["NutrientID"], "NutrientNameF"]
+            amount = v * rows.iloc[i]["NutrientValue"] * \
+                merged.at[k, "ConversionFactorValue"]/100
+            unit = nu_names.at[rows.iloc[i]["NutrientID"], "NutrientUnit"]
+            if nu_name in output.values():
+                output[nu_name][2] += amount
+            else:
+                output[nu_name] = (nu_name_fr, amount, unit)
 
     return output
+
+
+print(get_nutrients({"Cheese souffle": 500}))

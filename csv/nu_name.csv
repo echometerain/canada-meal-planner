@@ -1,9 +1,9 @@
 NutrientID,NutrientUnit,NutrientName,NutrientNameF,NutrientDecimals
-203,g,Protein,Protéines,2
-204,g,Fat (Total Lipids),Lipides Totaux,2
-205,g,"Carbohydrate, Total (By Difference)",Glucides Totaux (Par Différence),2
+203,g,Total Protein,Protéines,2
+204,g,Total Fat,Lipides Totaux,2
+205,g,Carbohydrate,Glucides Totaux (Par Différence),2
 207,g,"Ash, Total","Cendres, Totales",2
-208,kCal,Energy (Kilocalories),Énergie (Kilocalories),0
+208,kCal,Energy,Énergie (Kilocalories),0
 810,g,Starch,Amidon,2
 210,g,Sucrose,Sucrose,2
 211,g,Glucose,Glucose,2
@@ -20,7 +20,7 @@ NutrientID,NutrientUnit,NutrientName,NutrientNameF,NutrientDecimals
 268,kJ,Energy (Kilojoules),Énergie (Kilojoules),0
 269,g,"Sugars, Total",Sucres Totaux,2
 287,g,Galactose,Galactose,2
-291,g,"Fibre, Total Dietary",Fibres Alimentaires Totales,1
+291,g,Total Fibre,Fibres Alimentaires Totales,1
 301,mg,Calcium,Calcium,0
 303,mg,Iron,Fer,2
 304,mg,Magnesium,Magnésium,0
@@ -36,7 +36,7 @@ NutrientID,NutrientUnit,NutrientName,NutrientNameF,NutrientDecimals
 321,µg,Beta Carotene,Béta Carotène,0
 834,µg,Alpha Carotene,Alpha-Carotène,0
 323,mg,Alpha-Tocopherol,Alpha-Tocophérol,2
-324,IU,Vitamin D (International Units),Vitamine D (Unites Internationales),0
+324,IU,Vitamin D,Vitamine D (Unites Internationales),0
 876,µg,"Vitamin D2, Ergocalciferol","Vitamine D2, (Ergocalciférol)",1
 339,µg,Vitamin D (D2 + D3),Vitamine D (D2 + D3),1
 835,µg,Beta Cryptoxanthin,Bêta-Cryptozanthine,0
@@ -49,17 +49,17 @@ NutrientID,NutrientUnit,NutrientName,NutrientNameF,NutrientDecimals
 404,mg,Thiamin,Thiamine,3
 405,mg,Riboflavin,Riboflavine,3
 406,mg,Niacin (Nicotinic Acid) Preformed,Niacine (Acide Nicotinique) Préformée,3
-409,NE,Total Niacin Equivalent,Équivalent En Niacine Totale,3
+409,mg,Niacin,Équivalent En Niacine Totale,3
 410,mg,Pantothenic Acid,Acide Pantothénique,3
 415,mg,Vitamin B-6,Vitamine B-6,3
 416,µg,Biotin,Biotine,0
 417,µg,Total Folacin,Folacine Totale,0
 418,µg,Vitamin B-12,Vitamine B-12,2
-862,mg,"Choline, Total","Choline, Totale",1
+862,mg,Choline,"Choline, Totale",1
 430,µg,Vitamin K,Vitamine K,1
 431,µg,Folic Acid,Acide Folique,0
 806,µg,Naturally Occurring Folate,Folates Présents Naturellement,0
-815,µg,Dietary Folate Equivalents,Équivalents De Folate Alimentaire (Éfa),0
+815,µg,Folate,Équivalents De Folate Alimentaire (Éfa),0
 863,mg,Betaine,Bétaïne,1
 501,g,Tryptophan,Tryptophane,3
 502,g,Threonine,Thréonine,3
@@ -82,7 +82,7 @@ NutrientID,NutrientUnit,NutrientName,NutrientNameF,NutrientDecimals
 828,g,Hydroxyproline,Hydroxyproline,3
 550,mg,Aspartame,Aspartame,0
 875,mg,"Alpha-Tocopherol, Added","Alpha-Tocophérol, Ajouté",2
-874,µg,"Vitamin B12, Added","Vitamine B12, Ajoutée",2
+874,µg,Vitamin B12,"Vitamine B12, Ajoutée",2
 601,mg,Cholesterol,Cholesterol,0
 605,g,"Fatty Acids, Trans, Total",Acides Gras Trans Totaux,3
 606,g,"Fatty Acids, Saturated, Total",Acides Gras Saturés Totaux,3
