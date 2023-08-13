@@ -161,6 +161,13 @@ planner_frame = ctk.CTkFrame(app)
 current_date_label = ctk.CTkLabel(planner_frame, text=f"{month_lookup[month_current - 1]} {day_current}")
 planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame, height=400)
 
+# Footer
+footer_frame = ctk.CTkFrame(app, height = 75)
+leaderboard_button = ctk.CTkButton(footer_frame, text="Leaderboard", width = 75, height= 75)
+home_button = ctk.CTkButton(footer_frame, text="Home", width = 75, height= 75)
+recipe_button = ctk.CTkButton(footer_frame, text="Recipe", width = 75, height= 75)
+profile_button = ctk.CTkButton(footer_frame, text="Profile", width = 75, height= 75)
+
 # grid
 app.grid_columnconfigure(0, weight=1)
 app.grid_columnconfigure(1, weight=5)
@@ -187,6 +194,11 @@ planner_frame.grid(column=1, row=2, padx=8, sticky='new')
 current_date_label.grid(column=0, row=0, sticky='ew')
 planner_scrollable_frame.grid_columnconfigure(0, weight=1)
 planner_scrollable_frame.grid(column=0, row=1, sticky='ew')
+footer_frame.grid(column=0, row=10)
+leaderboard_button.grid(column=230, row=10)
+home_button.grid(column=460, row=10)
+recipe_button.grid(column=690, row=10)
+profile_button.grid(column=920, row=10)
 
 change_month()
 change_day()
