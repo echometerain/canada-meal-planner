@@ -38,18 +38,18 @@ app.iconbitmap(os.path.join("./images/cmp logo.ico"))
 planner_selected = None
 
 
-def search_entered(search_term):
+def search_entered(search_term=None):
+    if search_term is None:
+        search_term = search_entry.get()
+    if search_term == "":
+        return False
     # when the search button is entered, this function gets called,
     # which will get the data from the backend, and then forward it to the planner and some such function
     food_items = back_end.fuzzy_match(search_term)
-    food_list_suggest = []
-    for food in food_items:
-        food = food.split(',')
-        food = [i for i in food if search_term in i]
-        if len(food) > 0:
-            food_list_suggest.append(food[0].strip().lower())
-    for i in food_list_suggest:
-        pass
+    for suggestions_slaves, i in zip(suggestions_frame.grid_slaves(), range(9, -1, -1)):
+        print(i)
+        suggestions_slaves.configure(text=food_items[i])
+
 
 
 def change_month(offset=0):
@@ -90,10 +90,7 @@ def regenerate_planner(plans: dict):
     if not plans:
         for i in range(0 if plans else 4):
             hour_frame = ctk.CTkFrame(planner_scrollable_frame)
-            try:
-                hour_frame.bind("<Button-1>", lambda e, hf=hour_frame: change_planner_focus(hf))
-            except TypeError:
-                print('found it!')
+            hour_frame.bind("<Button-1>", lambda e, hf=hour_frame: change_planner_focus(hf))
             hour_frame.configure()
             planner_hour_name_entry = ctk.CTkEntry(hour_frame, height=20, font=('', 11),
                                                    placeholder_text='' if plans else default_planner_names[i])
@@ -114,18 +111,26 @@ def change_day(day=day_current):
     current_date_label.configure(text=f"{month_lookup[month_current - 1]} {day_current}")
     regenerate_planner({})
 
+
 # Search Bar
-Icon = ctk.CTkImage(light_image = Image.open(os.path.join("images/cmp64.png")))
-label = ctk.CTkLabel(master=app, image=Icon)
-label.grid(column=0, row=0)
+
 search_frame = ctk.CTkFrame(app, height=40)
-search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..", fg_color='#FA5151',
+search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..",
+                            fg_color='#FA5151',
                             border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
-search_entry.bind("<Key>", lambda e: search_entered(search_entry.get()))
-search_submit_button = ctk.CTkButton(search_frame, text="Add")
+search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
+
+cmp_icon = ctk.CTkImage(Image.open(os.path.join("images/cmp64.png")), size=(64, 64))
+icon_label = ctk.CTkLabel(app, image=cmp_icon, text='')
+
 
 # suggestions
 suggestions_frame = ctk.CTkFrame(app, height=60)
+for i in range(10):
+    suggestion_label = ctk.CTkLabel(suggestions_frame, text="")
+    suggestion_label.grid(column=i % 2, row=i // 2, sticky='nesw')
+    suggestions_frame.columnconfigure(i % 2, weight=1)
+    suggestions_frame.rowconfigure(i // 2, weight=1)
 
 # Calender
 calender_frame = ctk.CTkFrame(app)
@@ -171,26 +176,29 @@ profile_button = ctk.CTkButton(footer_frame, text="Profile", width = 75, height=
 # grid
 app.grid_columnconfigure(0, weight=1)
 app.grid_columnconfigure(1, weight=5)
+app.grid_columnconfigure(2, weight=5)
+app.grid_columnconfigure(3, weight=5)
 app.grid_rowconfigure(0, weight=1)
 app.grid_rowconfigure(1, weight=1)
 app.grid_rowconfigure(2, weight=8)
 calender_frame.rowconfigure(0, weight=1)
 calender_frame.rowconfigure(1, weight=8)
 calender_frame.columnconfigure(0, weight=1)
-calender_frame.grid(column=0, row=1, sticky='new', rowspan=2)
+calender_frame.grid(column=0, row=1, columnspan=2, sticky='new', rowspan=2)
 calender_month_frame.grid(column=0, row=0)
 calender_month_prior_button.grid(column=0, row=0)
 calender_month_year_label.grid(column=1, row=0, padx=30)
 calender_month_following_button.grid(column=2, row=0)
 calender_days_frame.grid(column=0, row=1, sticky='new')
+icon_label.grid(column=0, row=0, pady=(4, 8))
 search_frame.columnconfigure(0, weight=10)
 search_frame.columnconfigure(1, weight=1)
-search_frame.grid(column=1, row=0, padx=30, pady=10, sticky='sew')
+search_frame.grid(column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
 search_entry.grid(column=0, row=0, sticky='ew')
 search_submit_button.grid(column=1, row=0, sticky='ew')
-suggestions_frame.grid(column=1, row=1, padx=8, pady=(0, 4), sticky='nesw')
+suggestions_frame.grid(column=2, row=1, columnspan=2, padx=8, pady=(0, 4), sticky='nesw')
 planner_frame.grid_columnconfigure(0, weight=1)
-planner_frame.grid(column=1, row=2, padx=8, sticky='new')
+planner_frame.grid(column=2, row=2, columnspan=2, padx=8, sticky='new')
 current_date_label.grid(column=0, row=0, sticky='ew')
 planner_scrollable_frame.grid_columnconfigure(0, weight=1)
 planner_scrollable_frame.grid(column=0, row=1, sticky='ew')
