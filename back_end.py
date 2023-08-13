@@ -10,13 +10,13 @@ percent_e = pd.read_csv("./csv/percent_e.csv").set_index("Components")
 daily = pd.read_csv("./csv/daily.csv")
 
 
-def fuzzy_match(st: str) -> List[int]:
+def fuzzy_match(st: str) -> List[str]:
     """
     Args:
         st (str): partial string you want to complete
 
     Returns:
-        List[int]: top ten completions, sorted descending based on likelihood
+        List[str]: top ten completions, sorted descending based on likelihood
     """
     return [x[0] for x in process.extract(st, merged.index, limit=10)]
 
