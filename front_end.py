@@ -33,7 +33,7 @@ month_lookup = ["January", "February", "March", "April", "May", "June", "July", 
 app = ctk.CTk()
 app.geometry("960x540")
 app.title("Canada Meal Planner")
-
+app.iconbitmap('./images/cmp logo.ico')
 planner_selected = None
 
 
@@ -60,8 +60,10 @@ def change_month(offset=0):
     slaves = calender_days_frame.grid_slaves()
     for slave in slaves[0:31 - days]:
         slave.configure(fg_color=Colors.GREY)
+        slave.configure(state="disabled")
     for slave in slaves[31 - days:31]:
         slave.configure(fg_color=Colors.BLUE)
+        slave.configure(state="enabled")
 
 
 def change_planner_focus(hf=None):
