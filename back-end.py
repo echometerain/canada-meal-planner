@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import thefuzz as fw
+from thefuzz import process
 from typing import List
 
 merged = pd.read_csv("./csv/merged.csv").set_index("FoodDescription")
@@ -16,9 +16,9 @@ def fuzzy_match(st: str) -> List[int]:
         st (str): partial string you want to complete
 
     Returns:
-        List[int]: completed strings, sorted descending based on likelihood
+        List[int]: top ten completions, sorted descending based on likelihood
     """
-    True
+    return [x[0] for x in process.extract(st, merged.index, limit=10)]
 
 
 def check_daily(nu_dict: dict) -> dict:
@@ -61,6 +61,3 @@ def get_nutrients(plan: dict) -> dict:
                 output[nu_name] = (nu_name_fr, amount, unit)
 
     return output
-
-
-print(get_nutrients({"Cheese souffle": 500}))
