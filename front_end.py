@@ -18,6 +18,7 @@ class Colors(StrEnum):
     BLACK = "#231717"
     GREY = "#9CA2AE"
     DARK_GREY = "#303030"
+    WHITE = "#FFFFFF"
     RED = "#FA5151"
     BLUE = "#4278E0"
 
@@ -65,11 +66,9 @@ def change_month(offset=0):
     calender_month_year_label.configure(text=f"{month_lookup[month_current - 1]} {year_current}")
     slaves = calender_days_frame.grid_slaves()
     for slave in slaves[0:31 - days]:
-        slave.configure(fg_color=Colors.GREY)
-        slave.configure(state="disabled")
+        slave.configure(fg_color=Colors.GREY, state="disabled")
     for slave in slaves[31 - days:31]:
-        slave.configure(fg_color=Colors.BLUE)
-        slave.configure(state="enabled")
+        slave.configure(fg_color=Colors.BLUE, state="enabled")
 
 
 def change_planner_focus(hf=None):
@@ -142,7 +141,7 @@ buttons = []
 for z in range(35):
     i += 1
     button = ctk.CTkButton(calender_days_frame, text=str(i), command=lambda day=i: change_day(day))
-    button.configure(width=50, height=50)
+    button.configure(width=50, height=50, font=("", 14), text_color=Colors.WHITE, text_color_disabled=Colors.WHITE)
     button.grid(column=z % 7, row=z // 7, padx=1, pady=1, sticky='nesw')
     calender_days_frame.rowconfigure(z // 7, weight=1)
     calender_days_frame.columnconfigure(z % 7, weight=1)
