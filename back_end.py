@@ -15,6 +15,11 @@ units = {  # in mg
     "mg": 1.0,
     "μg": 0.001
 }
+food_fr_to_en = merged.reset_index().set_index("FoodDescriptionF")[
+    "FoodDescription"].to_dict()
+food_en_to_fr = merged["FoodDescriptionF"].to_dict()
+comp_fr_to_en = nu_names.set_index("NutrientNameF")["NutrientName"].to_dict()
+comp_fr_to_en = nu_names.set_index("NutrientName")["NutrientNameF"].to_dict()
 
 
 def fuzzy_match(st: str) -> List[str]:
@@ -132,5 +137,5 @@ def get_nutrients(plan: dict) -> dict:
     return output
 
 
-print(check_daily(get_nutrients(
-    {fuzzy_match("fish")[0]: 5000}), 25, True, False, True))
+# print(check_daily(get_nutrients(
+#     {fuzzy_match("fish")[0]: 5000}), 25, True, False, True))
