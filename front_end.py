@@ -1,18 +1,21 @@
 import customtkinter as ctk
 import datetime, calendar
+from enum import StrEnum
 import json
 import configparser
-import enum
+import back_end
+
+print(back_end)
 
 config = configparser.ConfigParser()
 config.read('settings.ini')
 language_code = config['miscellaneous']['language']
-text_json = json.load(open(f'locales\{language_code}.json'))
+text_json = json.load(open(f'locales/{language_code}.json', encoding='utf-8'))
 print(text_json)
 default_planner_names = text_json['default planner names']
 
 
-class Colors(enum.StrEnum):
+class Colors(StrEnum):
     BLACK = "#231717"
     GREY = "#303030"
     RED = "#FA5151"
