@@ -19,10 +19,10 @@ food_fr_to_en = merged.reset_index().set_index("FoodDescriptionF")[
     "FoodDescription"].to_dict()
 food_en_to_fr = merged["FoodDescriptionF"].to_dict()
 comp_fr_to_en = nu_names.set_index("NutrientNameF")["NutrientName"].to_dict()
-comp_fr_to_en = nu_names.set_index("NutrientName")["NutrientNameF"].to_dict()
+comp_en_to_fr = nu_names.set_index("NutrientName")["NutrientNameF"].to_dict()
 
 
-def fuzzy_match(st: str) -> List[str]:
+def fuzzy_match(st: str, en: bool = True) -> List[str]:
     """
     Args:
         st (str): partial string you want to completes
@@ -30,10 +30,12 @@ def fuzzy_match(st: str) -> List[str]:
     Returns:
         List[str]: top ten completions, sorted descending based on likelihood
     """
+    if en == False:
+        return [x[0] for x in process.extract(st, list(food_fr_to_en.keys()), limit=10)]
     return [x[0] for x in process.extract(st, merged.index, limit=10)]
 
 
-def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactating: bool) -> dict:
+def check_daily(nu_dict: dict, age: float, female: bool, en: bool = True, pregnant: bool = False, lactating: bool = False) -> dict:
     """
     Args:
         nu_dict (dict): output of get_nutrients()
@@ -97,6 +99,8 @@ def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactati
             nu_dict["Energy"][1], nu_dict[e][1], e) - mm.at["Max", ptype]
         output_pe[e] = (min_diff, max_diff)
 
+    if en == False:
+        return {comp_en_to_fr[k]: v for k, v in output.items()}, {comp_en_to_fr[k]: v for k, v in output_pe.items()}
     return output, output_pe
 
 
@@ -111,7 +115,7 @@ def get_e_percent(energy: np.double, amount: np.double, kcal_type: str) -> np.do
         return amount/energy
 
 
-def get_nutrients(plan: dict) -> dict:
+def get_nutrients(plan: dict, en=True) -> dict:
     """
     Args:
         plan (dict): day plan {food name: amount in grams}
@@ -119,6 +123,8 @@ def get_nutrients(plan: dict) -> dict:
     Returns:
         dict: {nutrient en name: (fr name, amount, unit)}
     """
+    if en == False:
+        plan = {food_fr_to_en[k]: v for k, v in plan.items()}
     output = {}
     for k, v in plan.items():
         rows = nu_amounts.loc[nu_amounts.FoodID == merged.at[k, "FoodID"]]
@@ -138,4 +144,8 @@ def get_nutrients(plan: dict) -> dict:
 
 
 # print(check_daily(get_nutrients(
-#     {fuzzy_match("fish")[0]: 5000}), 25, True, False, True))
+#     {fuzzy_match("fish")[0]: 5000}), 25, True, False, False, True))
+# plan = {fuzzy_match("fish")[0]: 500}
+# print({food_en_to_fr[key]: val for key, val in plan.items()})
+
+# print(fuzzy_match("poisson", en=False))
