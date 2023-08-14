@@ -162,8 +162,8 @@ def get_nutrients(plan: dict, en=True) -> dict:
     return output
 
 
-print(check_daily(get_nutrients(
-    {fuzzy_match("egg")[0]: 500}), 25, True, True, False, True))
+# print(check_daily(get_nutrients(
+#     {fuzzy_match("egg")[0]: 500, fuzzy_match("eggplant")[0]: 500, fuzzy_match("bread")[0]: 500}), 25, True, True, False, True))
 # plan = {fuzzy_match("fish")[0]: 500}
 # print({food_en_to_fr[key]: val for key, val in plan.items()})
 
