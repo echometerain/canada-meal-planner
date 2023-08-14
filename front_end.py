@@ -37,6 +37,8 @@ day_current = date_today.day
 month_lookup = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
                 "November", "December"]
 date_current = f"{month_lookup[month_current - 1]} {day_current} {year_current}"
+first_weekday = datetime.datetime(year_current, month_current, 1).weekday()
+calendar_month_year_text = ""
 
 # initialise app
 app = ctk.CTk()
@@ -89,7 +91,7 @@ def add_to_planner(food):
 
 
 def change_month(offset=0):
-    global month_current, year_current
+    global month_current, year_current, first_weekday, calendar_month_frame, calendar_month_year_text
     month_current += offset
     if month_current <= 0:
         year_current -= 1
@@ -98,13 +100,15 @@ def change_month(offset=0):
         year_current += 1
         month_current = 1
     days = cal.monthrange(year_current, month_current)[1]
-    calendar_month_year_label.configure(
-        text=f"{month_lookup[month_current - 1]} {year_current}")
+    calendar_month_year_text = f"{month_lookup[month_current - 1]} {year_current}"
     slaves = calendar_days_frame.grid_slaves()
     for slave in slaves[0:31 - days]:
         slave.configure(fg_color=Colors.GREY, state="disabled")
     for slave in slaves[31 - days:31]:
         slave.configure(fg_color=Colors.BLUE, state="enabled")
+    first_weekday = datetime.datetime(year_current, month_current, 1).weekday()
+    calendar_month_frame.destroy()
+    generate_calendar()
 
 
 def change_day(day=day_current):
@@ -203,8 +207,9 @@ def generate_suggestions():  # IGNORE THE MISNOMER.
 
 
 def generate_calendar():
-    global calendar_frame, calendar_month_year_label, calendar_days_frame
-    calendar_frame = ctk.CTkFrame(app)
+    global calendar_frame, calendar_month_year_label, calendar_days_frame, calendar_month_frame
+    if "calendar_frame" not in globals():
+        calendar_frame = ctk.CTkFrame(app)
     calendar_month_frame = ctk.CTkFrame(calendar_frame, height=30)
     calendar_month_prior_button = ctk.CTkButton(
         calendar_month_frame, text="<", width=50)
@@ -214,11 +219,15 @@ def generate_calendar():
     calendar_month_following_button.bind(
         "<Button-1>", lambda e: change_month(1))
     calendar_month_year_label = ctk.CTkLabel(calendar_month_frame)
+    calendar_month_year_label.configure(text=calendar_month_year_text)
     calendar_days_frame = ctk.CTkFrame(calendar_frame)
-    i = 0
+
+    i = -first_weekday
     buttons = []
     for z in range(35):
         i += 1
+        if i < 1:
+            continue
         button = ctk.CTkButton(calendar_days_frame, text=str(
             i), command=lambda day=i: change_day(day))
         button.configure(width=50, height=50, font=(
@@ -230,10 +239,10 @@ def generate_calendar():
             button.grid(padx=(1, 10), sticky='nesw')
         if z % 7 == 0:
             button.grid(padx=(10, 1), sticky='nesw')
-        if i <= 7:
-            button.grid(pady=(10, 1), sticky='nesw')
-        elif i >= 29:
-            button.grid(pady=(1, 10), sticky='nesw')
+        # if i <= 7:
+        #     button.grid(pady=(10, 1), sticky='nesw')
+        # elif i >= 29:
+        #     button.grid(pady=(1, 10), sticky='nesw')
         buttons.append(button)
         if i == 31:
             break
