@@ -166,11 +166,11 @@ current_date_label = ctk.CTkLabel(planner_frame, text=f"{month_lookup[month_curr
 planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
 
 # Footer
-footer_frame = ctk.CTkFrame(app, height=75)
-leaderboard_button = ctk.CTkButton(footer_frame, text="Leaderboard", width=75, height=75)
-home_button = ctk.CTkButton(footer_frame, text="Home", width=75, height=75)
-recipe_button = ctk.CTkButton(footer_frame, text="Recipe", width=75, height=75)
-profile_button = ctk.CTkButton(footer_frame, text="Profile", width=75, height=75)
+footer_frame = ctk.CTkFrame(app, height = 75)
+leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size = (76, 73)))
+home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size = (76, 73)))
+recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size = (76, 73)))
+profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size = (76, 73)))
 
 # grid
 app.grid_columnconfigure(0, weight=1)
