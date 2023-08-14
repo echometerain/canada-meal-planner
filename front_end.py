@@ -50,18 +50,23 @@ app.minsize(800, 600)
 planner_selection = None
 
 
-def recipe_entered():
-    if search_term is None:
-        search_term = search_entry.get()
+def recipe_entered(search_term):
     if search_term == "":
         return False
+    food_item = back_end.fuzzy_match(search_term)[0]
+    nutrients = back_end.get_nutrients({food_item: 100})
+    percent_day = back_end.check_daily(nutrients, 17, False)
+
+    print(f"for 100g of {food_item}")
+    print(nutrients)
+    print(percent_day)
 
 
-def change_planner_table(combooption):
+def change_planner_table(combo_option):
     for slave in planner_scrollable_frame.grid_slaves():
         slave.forget()
         slave.destroy()
-    food_items = user_data[user]['dates'][date_current][combooption]
+    food_items = user_data[user]['dates'][date_current][combo_option]
     for item, i in zip(food_items, range(len(food_items))):
         food_label = ctk.CTkLabel(
             planner_scrollable_frame, text=item, height=20, font=('', 20))
@@ -85,9 +90,21 @@ def search_entered(search_term=None):
 
 def add_to_planner(food):
     planner_table = planner_combobox_var.get()
-    user_data[user]['dates'][date_current][planner_combobox_var.get()
-                                           ].append(food)
-    change_planner_table(planner_combobox_var.get())
+    user_data[user]['dates'][date_current][planner_table].append(food)
+    change_planner_table(planner_table)
+    # we did not have time to let the user choose these options
+    nutrients = back_end.get_nutrients(
+        {k: 500 for k in user_data[user]['dates'][date_current][planner_table]})
+    percent_day = back_end.check_daily(nutrients, 17, False)
+    print("Assuming you had 500g of each food")
+    print(nutrients)
+    print(percent_day)
+
+
+def rm_from_planner(food):
+    planner_table = planner_combobox_var.get()
+    user_data[user]['dates'][date_current][planner_table].remove(food)
+    change_planner_table(planner_table)
 
 
 def change_month(offset=0):
@@ -168,7 +185,7 @@ def recipe_search():
                                        font=('', 13), corner_radius=10)
     recipe_search_entry.bind("<Return>", lambda e: recipe_entered())
     recipe_search_submit_button = ctk.CTkButton(
-        recipe_search_frame, text="Search", command=recipe_entered)
+        recipe_search_frame, text="Search", command=lambda: recipe_entered(recipe_search_entry.get()))
 
 
 # Title for leaderboard page

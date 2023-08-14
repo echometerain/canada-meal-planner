@@ -86,7 +86,7 @@ def check_daily(nu_dict: dict, age: float, female: bool, en: bool = True, pregna
             if age > ages[i]:
                 age_i = i
             elif age > 4:
-                ptype = str(ages[age_i]) + "f" if female else "m"
+                ptype = str(ages[age_i]) + " " + ("f" if female else "m")
             else:
                 ptype = str(ages[age_i])
 

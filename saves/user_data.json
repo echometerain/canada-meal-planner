@@ -2,8 +2,16 @@
     "user": {
         "dates": {
             "August 14 2023": {
-                "d\u00e9jeuner": [],
-                "d\u00eener": [],
+                "d\u00e9jeuner": [
+                    "Breadfruit, raw",
+                    "Fish oil, cod liver",
+                    "Tuna salad"
+                ],
+                "d\u00eener": [
+                    "Breadfruit, raw",
+                    "Seeds, breadfruit seeds, boiled",
+                    "Tofu, koyadofu, dried-frozen"
+                ],
                 "casse-cro\u00fbte": [],
                 "souper": []
             },
@@ -142,6 +150,54 @@
                 "souper": []
             },
             "August 28 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 0 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 1 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 5 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 6 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 7 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 8 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 15 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "September 14 2023": {
                 "d\u00e9jeuner": [],
                 "d\u00eener": [],
                 "casse-cro\u00fbte": [],
