@@ -40,6 +40,12 @@ app.iconbitmap(os.path.join("./images/cmp logo.ico"))
 app.minsize(800, 600)
 planner_selection = None
 
+def recipe_entered():
+    if search_term is None:
+        search_term = search_entry.get()
+    if search_term == "":
+        return False
+
 def search_entered(search_term=None):
     if search_term is None:
         search_term = search_entry.get()
@@ -142,14 +148,38 @@ def change_day(day=day_current):
 def search():
     global search_frame, search_entry, search_submit_button
     search_frame = ctk.CTkFrame(app, height=40)
-    search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..", fg_color='#FA5151', border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
+    search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..", fg_color='#FA5151', border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13), corner_radius=10)
     search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
     search_frame = ctk.CTkFrame(app, height=40)
     search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..",
                             fg_color='#FA5151',
-                            border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
+                            border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13), corner_radius=10)
     search_entry.bind("<Return>", lambda e: search_entered())
     search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
+
+# Search Bar for recipe page
+def recipe_search():
+    global recipe_search_frame, recipe_search_entry, recipe_search_submit_button
+    recipe_search_frame = ctk.CTkFrame(app, height=40)
+    recipe_search_entry = ctk.CTkEntry(recipe_search_frame, placeholder_text="Search recipes through Canada Meal Planner..", fg_color='#FA5151', border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13), corner_radius=10)
+    recipe_search_submit_button = ctk.CTkButton(recipe_search_frame, text="Search", command=recipe_entered)
+    recipe_search_frame = ctk.CTkFrame(app, height=40)
+    recipe_search_entry = ctk.CTkEntry(recipe_search_frame, placeholder_text="Search recipes through Canada Meal Planner..",
+                            fg_color='#FA5151',
+                            border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13), corner_radius=10)
+    recipe_search_entry.bind("<Return>", lambda e: recipe_entered())
+    recipe_search_submit_button = ctk.CTkButton(recipe_search_frame, text="Search", command=recipe_entered)
+
+# Title for leaderboard page
+def leaderboard_title():
+    global leaderboard_title_frame, leaderboard_label
+    leaderboard_title_frame = ctk.CTkFrame(app, height=40)
+    leaderboard_label = ctk.CTkLabel(leaderboard_title_frame, text="Leaderboard", fg_color='#FA5151', text_color='#FFFFFF', font=('', 13), corner_radius=10, anchor="w")
+    
+def profile_title():
+    global profile_title_frame, profile_label
+    profile_title_frame = ctk.CTkFrame(app, height=40)
+    profile_label = ctk.CTkLabel(profile_title_frame, text="Profile", fg_color='#FA5151', text_color='#FFFFFF', font=('', 13), corner_radius=10, anchor="w")
 
 cmp_icon = ctk.CTkImage(Image.open(os.path.join("images/cmp64.png")), size=(64, 64))
 icon_label = ctk.CTkLabel(app, image=cmp_icon, text='')
@@ -212,15 +242,50 @@ def display_page():
         planner()
         search()
         suggestions()
+        calendar_frame.rowconfigure(0, weight=1)
+        calendar_frame.rowconfigure(1, weight=8)
+        calendar_frame.columnconfigure(0, weight=1)
+        calendar_frame.grid(column=0, row=1, columnspan=2, sticky='new', rowspan=2)
+        calendar_month_frame.grid(column=0, row=0)
+        calendar_month_prior_button.grid(column=0, row=0)
+        calendar_month_year_label.grid(column=1, row=0, padx=30)
+        calendar_month_following_button.grid(column=2, row=0)
+        calendar_days_frame.grid(column=0, row=1, sticky='new')
+        search_frame.columnconfigure(0, weight=10)
+        search_frame.columnconfigure(1, weight=1)
+        search_frame.grid(column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
+        search_entry.grid(column=0, row=0, sticky='ew')
+        search_submit_button.grid(column=1, row=0, sticky='ew')
+        suggestions_frame.grid(column=2, row=1, columnspan=2, padx=8, pady=(0, 4), sticky='nesw')
+        planner_frame.grid_columnconfigure(0, weight=1)
+        planner_frame.grid_rowconfigure(0, weight=1)
+        planner_frame.grid_rowconfigure(1, weight=8)
+        planner_frame.grid(column=2, row=2, columnspan=2, padx=8, sticky='nesw')
+        current_date_label.grid(column=0, row=0, sticky='ew')
+        planner_scrollable_frame.grid_columnconfigure(0, weight=1)
+        planner_scrollable_frame.grid(column=0, row=1, sticky='nesw')
 
     elif page == "Recipe":
-        print("recipe")
+        recipe_search()
+        recipe_search_frame.columnconfigure(0, weight=10)
+        recipe_search_frame.columnconfigure(1, weight=1)
+        recipe_search_frame.grid(column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
+        recipe_search_entry.grid(column=0, row=0, sticky='ew')
+        recipe_search_submit_button.grid(column=1, row=0, sticky='ew')
 
     elif page == "Profile":
-        print("profile")
+        profile_title()
+        profile_title_frame.columnconfigure(0, weight=10)
+        profile_title_frame.columnconfigure(1, weight=1)
+        profile_title_frame.grid(column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
+        profile_label.grid(column=0, row=0, sticky='ew')
 
     elif page == "Leaderboard":
-        print("leaderboard")
+        leaderboard_title()
+        leaderboard_title_frame.columnconfigure(0, weight=10)
+        leaderboard_title_frame.columnconfigure(1, weight=1)
+        leaderboard_title_frame.grid(column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
+        leaderboard_label.grid(column=0, row=0, sticky='ew')
 
 display_page()
 
@@ -240,29 +305,7 @@ app.grid_rowconfigure(0, weight=1)
 app.grid_rowconfigure(1, weight=1)
 app.grid_rowconfigure(2, weight=8)
 app.grid_rowconfigure(3, weight=2)
-calendar_frame.rowconfigure(0, weight=1)
-calendar_frame.rowconfigure(1, weight=8)
-calendar_frame.columnconfigure(0, weight=1)
-calendar_frame.grid(column=0, row=1, columnspan=2, sticky='new', rowspan=2)
-calendar_month_frame.grid(column=0, row=0)
-calendar_month_prior_button.grid(column=0, row=0)
-calendar_month_year_label.grid(column=1, row=0, padx=30)
-calendar_month_following_button.grid(column=2, row=0)
-calendar_days_frame.grid(column=0, row=1, sticky='new')
 icon_label.grid(column=0, row=0, pady=(4, 8))
-search_frame.columnconfigure(0, weight=10)
-search_frame.columnconfigure(1, weight=1)
-search_frame.grid(column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
-search_entry.grid(column=0, row=0, sticky='ew')
-search_submit_button.grid(column=1, row=0, sticky='ew')
-suggestions_frame.grid(column=2, row=1, columnspan=2, padx=8, pady=(0, 4), sticky='nesw')
-planner_frame.grid_columnconfigure(0, weight=1)
-planner_frame.grid_rowconfigure(0, weight=1)
-planner_frame.grid_rowconfigure(1, weight=8)
-planner_frame.grid(column=2, row=2, columnspan=2, padx=8, sticky='nesw')
-current_date_label.grid(column=0, row=0, sticky='ew')
-planner_scrollable_frame.grid_columnconfigure(0, weight=1)
-planner_scrollable_frame.grid(column=0, row=1, sticky='nesw')
 footer_frame.columnconfigure(0, weight=1)
 footer_frame.columnconfigure(1, weight=1)
 footer_frame.columnconfigure(2, weight=1)
