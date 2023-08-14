@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import datetime
-import calendar
+import calendar as cal
 from enum import StrEnum
 from PIL import Image
 import os
@@ -14,6 +14,7 @@ language_code = config['miscellaneous']['language']
 text_json = json.load(open(f'locales/{language_code}.json', encoding='utf-8'))
 default_planner_names = text_json['default planner names']
 
+page = "Home"
 
 class Colors(StrEnum):
     BLACK = "#231717"
@@ -38,7 +39,6 @@ app.title("Canada Meal Planner")
 app.iconbitmap(os.path.join("./images/cmp logo.ico"))
 planner_selected = None
 
-
 def search_entered(search_term=None):
     if search_term is None:
         search_term = search_entry.get()
@@ -51,10 +51,28 @@ def search_entered(search_term=None):
         print(i)
         suggestions_slaves.configure(text=food_items[i])
 
+def profile_page():
+     global page
+     page = "Profile"
+     display_page()
+
+def home_page():
+     global page
+     page = "Home"
+     display_page()
+
+def recipe_page():
+     global page
+     page = "Recipe"
+     display_page()
+
+def leaderboard_page():
+     global page
+     page = "Leaderboard"
+     display_page()
 
 def change_month(offset=0):
-    global month_current
-    global year_current
+    global month_current, year_current
     month_current += offset
     if month_current <= 0:
         year_current -= 1
@@ -62,14 +80,13 @@ def change_month(offset=0):
     if month_current >= 13:
         year_current += 1
         month_current = 1
-    days = calendar.monthrange(year_current, month_current)[1]
-    calender_month_year_label.configure(text=f"{month_lookup[month_current - 1]} {year_current}")
-    slaves = calender_days_frame.grid_slaves()
+    days = cal.monthrange(year_current, month_current)[1]
+    calendar_month_year_label.configure(text=f"{month_lookup[month_current - 1]} {year_current}")
+    slaves = calendar_days_frame.grid_slaves()
     for slave in slaves[0:31 - days]:
         slave.configure(fg_color=Colors.GREY, state="disabled")
     for slave in slaves[31 - days:31]:
         slave.configure(fg_color=Colors.BLUE, state="enabled")
-
 
 def change_planner_focus(hf=None):
     global planner_selected
@@ -78,7 +95,6 @@ def change_planner_focus(hf=None):
     planner_selected = hf
     if hf is not None:
         hf.configure(border_width=3, border_color='#ff0000')
-
 
 def regenerate_planner(plans: dict):
     # fill planner_scrollable_frame with that days entries, or placeholder text if there are none.
@@ -103,7 +119,6 @@ def regenerate_planner(plans: dict):
     planner_add_button = ctk.CTkButton(planner_scrollable_frame, text='Add new')
     planner_add_button.grid(column=0, sticky='ew')
 
-
 def change_day(day=day_current):
     # when a date is clicked on in the calendar, this function is called and will change the current day displayed
     global day_current
@@ -111,66 +126,92 @@ def change_day(day=day_current):
     current_date_label.configure(text=f"{month_lookup[month_current - 1]} {day_current}")
     regenerate_planner({})
 
-
 # Search Bar
-
-search_frame = ctk.CTkFrame(app, height=40)
-search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..",
-                            fg_color='#FA5151',
-                            border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
-search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
+def search():
+    global search_frame, search_entry, search_submit_button
+    search_frame = ctk.CTkFrame(app, height=40)
+    search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..", fg_color='#FA5151', border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
+    search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
 
 cmp_icon = ctk.CTkImage(Image.open(os.path.join("images/cmp64.png")), size=(64, 64))
 icon_label = ctk.CTkLabel(app, image=cmp_icon, text='')
 
 # suggestions
-suggestions_frame = ctk.CTkFrame(app, height=60)
-for i in range(10):
-    suggestion_label = ctk.CTkLabel(suggestions_frame, text="")
-    suggestion_label.grid(column=i % 2, row=i // 2, sticky='nesw')
-    suggestions_frame.columnconfigure(i % 2, weight=1)
-    suggestions_frame.rowconfigure(i // 2, weight=1)
+def suggestions():
+    global suggestions_frame, suggestion_label
+    suggestions_frame = ctk.CTkFrame(app, height=60)
+    for i in range(10):
+        if i == 0:
+            suggestion_label = ctk.CTkLabel(suggestions_frame, text="Use the search bar above to search for a food item. Suggestions will appear here.")
+        elif i > 0:
+            suggestion_label = ctk.CTkLabel(suggestions_frame, text="")
+        suggestion_label.grid(column=i % 2, row=i // 2, sticky='nesw')
+        suggestions_frame.columnconfigure(i % 2, weight=1)
+        suggestions_frame.rowconfigure(i // 2, weight=1)
 
-# Calender
-calender_frame = ctk.CTkFrame(app)
-calender_month_frame = ctk.CTkFrame(calender_frame, height=30)
-calender_month_prior_button = ctk.CTkButton(calender_month_frame, text="<", width=50)
-calender_month_prior_button.bind("<Button-1>", lambda e: change_month(-1))
-calender_month_following_button = ctk.CTkButton(calender_month_frame, text=">", width=50)
-calender_month_following_button.bind("<Button-1>", lambda e: change_month(1))
-calender_month_year_label = ctk.CTkLabel(calender_month_frame)
-calender_days_frame = ctk.CTkFrame(calender_frame)
-i = 0
-buttons = []
-for z in range(35):
-    i += 1
-    button = ctk.CTkButton(calender_days_frame, text=str(i), command=lambda day=i: change_day(day))
-    button.configure(width=50, height=50, font=("", 14), text_color=Colors.WHITE, text_color_disabled=Colors.WHITE)
-    button.grid(column=z % 7, row=z // 7, padx=1, pady=1, sticky='nesw')
-    calender_days_frame.rowconfigure(z // 7, weight=1)
-    calender_days_frame.columnconfigure(z % 7, weight=1)
-    if z % 7 == 6:
-        button.grid(padx=(1, 10), sticky='nesw')
-    if z % 7 == 0:
-        button.grid(padx=(10, 1), sticky='nesw')
-    if i <= 7:
-        button.grid(pady=(10, 1), sticky='nesw')
-    elif i >= 29:
-        button.grid(pady=(1, 10), sticky='nesw')
-    buttons.append(button)
-    if i == 31:
-        break
+# calendar
+def calendar():
+    global calendar_frame, calendar_month_frame, calendar_month_prior_button, calendar_month_following_button, calendar_month_year_label, calendar_days_frame
+    calendar_frame = ctk.CTkFrame(app)
+    calendar_month_frame = ctk.CTkFrame(calendar_frame, height=30)
+    calendar_month_prior_button = ctk.CTkButton(calendar_month_frame, text="<", width=50)
+    calendar_month_prior_button.bind("<Button-1>", lambda e: change_month(-1))
+    calendar_month_following_button = ctk.CTkButton(calendar_month_frame, text=">", width=50)
+    calendar_month_following_button.bind("<Button-1>", lambda e: change_month(1))
+    calendar_month_year_label = ctk.CTkLabel(calendar_month_frame)
+    calendar_days_frame = ctk.CTkFrame(calendar_frame)
+    i = 0
+    buttons = []
+    for z in range(35):
+        i += 1
+        button = ctk.CTkButton(calendar_days_frame, text=str(i), command=lambda day=i: change_day(day))
+        button.configure(width=50, height=50, font=("", 14), text_color=Colors.WHITE, text_color_disabled=Colors.WHITE)
+        button.grid(column=z % 7, row=z // 7, padx=1, pady=1, sticky='nesw')
+        calendar_days_frame.rowconfigure(z // 7, weight=1)
+        calendar_days_frame.columnconfigure(z % 7, weight=1)
+        if z % 7 == 6:
+            button.grid(padx=(1, 10), sticky='nesw')
+        if z % 7 == 0:
+            button.grid(padx=(10, 1), sticky='nesw')
+        if i <= 7:
+            button.grid(pady=(10, 1), sticky='nesw')
+        elif i >= 29:
+            button.grid(pady=(1, 10), sticky='nesw')
+        buttons.append(button)
+        if i == 31:
+            break
+        
 # Planner
-planner_frame = ctk.CTkFrame(app)
-current_date_label = ctk.CTkLabel(planner_frame, text=f"{month_lookup[month_current - 1]} {day_current}")
-planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
+def planner():
+    global planner_frame, current_date_label, planner_scrollable_frame, calendar_frame
+    planner_frame = ctk.CTkFrame(app)
+    current_date_label = ctk.CTkLabel(planner_frame, text=f"{month_lookup[month_current - 1]} {day_current}")
+    planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
+    calendar()
 
 # Footer
 footer_frame = ctk.CTkFrame(app, height = 75)
-leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size = (76, 73)))
-home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size = (76, 73)))
-recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size = (76, 73)))
-profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size = (76, 73)))
+leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size = (76, 73)), command=leaderboard_page)
+home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size = (76, 73)), command=home_page)
+recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size = (76, 73)), command=recipe_page)
+profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size = (76, 73)), command=profile_page)
+
+def display_page():
+    if page == "Home":
+        search()
+        suggestions()
+        planner()
+
+    elif page == "Recipe":
+        print("recipe")
+
+    elif page == "Profile":
+        print("profile")
+
+    elif page == "Leaderboard":
+        print("leaderboard")
+
+display_page()
 
 # grid
 app.grid_columnconfigure(0, weight=1)
@@ -181,15 +222,15 @@ app.grid_rowconfigure(0, weight=1)
 app.grid_rowconfigure(1, weight=1)
 app.grid_rowconfigure(2, weight=8)
 app.grid_rowconfigure(3, weight=2)
-calender_frame.rowconfigure(0, weight=1)
-calender_frame.rowconfigure(1, weight=8)
-calender_frame.columnconfigure(0, weight=1)
-calender_frame.grid(column=0, row=1, columnspan=2, sticky='new', rowspan=2)
-calender_month_frame.grid(column=0, row=0)
-calender_month_prior_button.grid(column=0, row=0)
-calender_month_year_label.grid(column=1, row=0, padx=30)
-calender_month_following_button.grid(column=2, row=0)
-calender_days_frame.grid(column=0, row=1, sticky='new')
+calendar_frame.rowconfigure(0, weight=1)
+calendar_frame.rowconfigure(1, weight=8)
+calendar_frame.columnconfigure(0, weight=1)
+calendar_frame.grid(column=0, row=1, columnspan=2, sticky='new', rowspan=2)
+calendar_month_frame.grid(column=0, row=0)
+calendar_month_prior_button.grid(column=0, row=0)
+calendar_month_year_label.grid(column=1, row=0, padx=30)
+calendar_month_following_button.grid(column=2, row=0)
+calendar_days_frame.grid(column=0, row=1, sticky='new')
 icon_label.grid(column=0, row=0, pady=(4, 8))
 search_frame.columnconfigure(0, weight=10)
 search_frame.columnconfigure(1, weight=1)
