@@ -209,27 +209,19 @@ def planner():
     planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
     calendar()
 
-def display_page(page='home'):
-    if page == "home":
+def display_page():
+    if page == "Home":
         planner()
         search()
         suggestions()
-        app.grid_columnconfigure(0, weight=1)
-        app.grid_columnconfigure(1, weight=5)
-        app.grid_columnconfigure(2, weight=5)
-        app.grid_columnconfigure(3, weight=5)
-        app.grid_rowconfigure(0, weight=1)
-        app.grid_rowconfigure(1, weight=1)
-        app.grid_rowconfigure(2, weight=8)
-        app.grid_rowconfigure(3, weight=2)
 
-    elif page == "recipe":
+    elif page == "Recipe":
         print("recipe")
 
-    elif page == "profile":
+    elif page == "Profile":
         print("profile")
 
-    elif page == "leaderboard":
+    elif page == "Leaderboard":
         print("leaderboard")
 
 display_page()
@@ -242,7 +234,14 @@ recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.op
 profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size=(76, 73)), command=profile_page)
 
 # grid
-
+app.grid_columnconfigure(0, weight=1)
+app.grid_columnconfigure(1, weight=5)
+app.grid_columnconfigure(2, weight=5)
+app.grid_columnconfigure(3, weight=5)
+app.grid_rowconfigure(0, weight=1)
+app.grid_rowconfigure(1, weight=1)
+app.grid_rowconfigure(2, weight=8)
+app.grid_rowconfigure(3, weight=2)
 calendar_frame.rowconfigure(0, weight=1)
 calendar_frame.rowconfigure(1, weight=8)
 calendar_frame.columnconfigure(0, weight=1)
