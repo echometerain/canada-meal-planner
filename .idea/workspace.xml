@@ -5,8 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24ab91f0-9f00-4c0d-8f63-50d36db84903" name="Changes" comment="add Workspace">
+      <change afterPath="$PROJECT_DIR$/images/home.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/leaderboard.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/profile.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/recipe.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_end.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_end.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Home.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/Home.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Leaderboard.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/Leaderboard.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Profile.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/Profile.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/images/Recipe.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/Recipe.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
