@@ -28,11 +28,10 @@ cli = typer.Typer()
 
 @cli.command()
 def get_info(plan: list[str], age: Annotated[float, typer.Option()], female: Annotated[bool, typer.Option()], en: Annotated[bool, typer.Option()] = True, pregnant: Annotated[bool, typer.Option()] = False, lactating: Annotated[bool, typer.Option()] = False):
-    """Gets nutrients and percentage of official reference values from fuzzy input
+    """Gets nutrients and percentage of official reference values from fuzzy input, Obtient les nutriments et le pourcentage des valeurs de référence officielles à partir d'une entrée floue
 
     Args:
-        nu_dict (dict): Output of get_nutrients()
-            {nutrient en name: (fr name, amount, unit)}
+        plan: Meal plan {food name: amount in grams}
 
         age: Floating point for infants
 
@@ -57,13 +56,22 @@ def get_info(plan: list[str], age: Annotated[float, typer.Option()], female: Ann
     for i in range(0, len(plan), 2):
         plan_dict[fuzzy_match(plan[i], en)[0]] = float(plan[i+1])
     nutrients = get_nutrients(plan_dict)
-    print(f"Nutrients for {plan_dict}:")
+    if en:
+        print(f"Nutrients for {plan_dict}:")
+    else:
+        print(f"Nutriments pour {plan_dict}:")
     print(nutrients)
     daily_percent, energy_offsets = check_daily(
         nutrients, age, female, en, pregnant, lactating)
-    print("Percent of nutrients in meal plan in (min, recommended, max) reference intakes:")
+    if en:
+        print("Percent of nutrients in meal plan in (min, recommended, max) reference intakes:")
+    else:
+        print("Pourcentage de nutriments dans le plan de repas dans les apports de référence (min, recommandé, max):")
     print(daily_percent)
-    print("Difference in nutrient / energy percent ratio of nutrients in meal plan and (min, max) reference values:")
+    if en:
+        print("Difference in nutrient / energy percent ratio of nutrients in meal plan and (min, max) reference values:")
+    else:
+        print("Différence dans le rapport en pourcentage nutriments/énergie des nutriments dans le plan de repas et les valeurs de référence (min, max):")
     print(energy_offsets)
 
 
@@ -83,7 +91,7 @@ def search(st: str, en: Annotated[bool, typer.Option()] = True):
 
 
 def fuzzy_match(st: str, en: bool = True) -> List[str]:
-    """Fuzzy match a food type from Canada's official database
+    """Fuzzy match a food type from Canada's official database, Correspondance approximative avec un type d'aliment de la base de données officielle du Canada
 
     Args:
         st (str): partial string you want to complete
