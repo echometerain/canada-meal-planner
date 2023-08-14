@@ -6,6 +6,7 @@ from enum import StrEnum
 from PIL import Image
 import os
 import json
+import random
 import configparser
 import back_end
 
@@ -291,6 +292,17 @@ def generate_planner():
     planner_scrollable_frame.grid_columnconfigure(0, weight=1)
     planner_scrollable_frame.grid(column=0, row=2, sticky='nesw')
 
+def coming_soon():
+    global coming_soon_frame, coming_soon_label
+    emojis = ["🍇", "🍈", "🍊", "🍉", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🥑"]
+    coming_soon_frame = ctk.CTkFrame(app)
+    coming_soon_label = ctk.CTkLabel(coming_soon_frame, text=f"This page is currently under development. Please check again later. {random.choice(emojis)}", fg_color='#FA5151', text_color='#FFFFFF',
+                                 font=('', 13), corner_radius=10, anchor="w")
+    coming_soon_frame.columnconfigure(0, weight=10)
+    coming_soon_frame.columnconfigure(1, weight=1)
+    coming_soon_frame.grid(
+    column=1, row=2, columnspan=3, padx=8, pady=8, sticky='ew')
+    coming_soon_label.grid(column=0, row=0, sticky='ew')
 
 def generate_footer():
     global footer_frame
@@ -339,6 +351,7 @@ def display_page(page="Home"):
         app.grid_rowconfigure(1, weight=1)
         app.grid_rowconfigure(2, weight=8)
         app.grid_rowconfigure(3, weight=2)
+        icon_label.grid(column=0, row=0, columnspan=1)
         calendar_frame.grid(column=0, row=1, columnspan=2,
                             sticky='new', rowspan=2)
         search_frame.grid(column=1, row=0, columnspan=3,
@@ -356,6 +369,11 @@ def display_page(page="Home"):
             column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
         recipe_search_entry.grid(column=0, row=0, sticky='ew')
         recipe_search_submit_button.grid(column=1, row=0, sticky='ew')
+        generate_footer()
+        generate_logo()
+        footer_frame.grid(column=0, row=3, columnspan=4, sticky='nesw')
+        icon_label.grid(column=0, row=0, columnspan=1)
+        coming_soon()
     elif page == "Profile":
         profile_title()
         profile_title_frame.columnconfigure(0, weight=10)
@@ -363,6 +381,11 @@ def display_page(page="Home"):
         profile_title_frame.grid(
             column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
         profile_label.grid(column=0, row=0, sticky='ew')
+        generate_footer()
+        generate_logo()
+        footer_frame.grid(column=0, row=3, columnspan=4, sticky='nesw')
+        icon_label.grid(column=0, row=0, columnspan=1)
+        coming_soon()
     elif page == "Leaderboard":
         leaderboard_title()
         leaderboard_title_frame.columnconfigure(0, weight=10)
@@ -370,6 +393,11 @@ def display_page(page="Home"):
         leaderboard_title_frame.grid(
             column=1, row=0, columnspan=3, padx=8, pady=8, sticky='ew')
         leaderboard_label.grid(column=0, row=0, sticky='ew')
+        generate_footer()
+        generate_logo()
+        footer_frame.grid(column=0, row=3, columnspan=4, sticky='nesw')
+        icon_label.grid(column=0, row=0, columnspan=1)
+        coming_soon()
 
 
 def generate_app():
