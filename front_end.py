@@ -1,5 +1,6 @@
 import customtkinter as ctk
-import datetime, calendar
+import datetime
+import calendar
 from enum import StrEnum
 from PIL import Image
 import os
@@ -49,7 +50,6 @@ def search_entered(search_term=None):
     for suggestions_slaves, i in zip(suggestions_frame.grid_slaves(), range(9, -1, -1)):
         print(i)
         suggestions_slaves.configure(text=food_items[i])
-
 
 
 def change_month(offset=0):
@@ -123,7 +123,6 @@ search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search
 cmp_icon = ctk.CTkImage(Image.open(os.path.join("images/cmp64.png")), size=(64, 64))
 icon_label = ctk.CTkLabel(app, image=cmp_icon, text='')
 
-
 # suggestions
 suggestions_frame = ctk.CTkFrame(app, height=60)
 for i in range(10):
@@ -164,14 +163,14 @@ for z in range(35):
 # Planner
 planner_frame = ctk.CTkFrame(app)
 current_date_label = ctk.CTkLabel(planner_frame, text=f"{month_lookup[month_current - 1]} {day_current}")
-planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame, height=400)
+planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
 
 # Footer
 footer_frame = ctk.CTkFrame(app, height = 75)
-leaderboard_button = ctk.CTkButton(footer_frame, text="Leaderboard", width = 75, height= 75)
-home_button = ctk.CTkButton(footer_frame, text="Home", width = 75, height= 75)
-recipe_button = ctk.CTkButton(footer_frame, text="Recipe", width = 75, height= 75)
-profile_button = ctk.CTkButton(footer_frame, text="Profile", width = 75, height= 75)
+leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size = (76, 73)))
+home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size = (76, 73)))
+recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size = (76, 73)))
+profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size = (76, 73)))
 
 # grid
 app.grid_columnconfigure(0, weight=1)
@@ -181,6 +180,7 @@ app.grid_columnconfigure(3, weight=5)
 app.grid_rowconfigure(0, weight=1)
 app.grid_rowconfigure(1, weight=1)
 app.grid_rowconfigure(2, weight=8)
+app.grid_rowconfigure(3, weight=2)
 calender_frame.rowconfigure(0, weight=1)
 calender_frame.rowconfigure(1, weight=8)
 calender_frame.columnconfigure(0, weight=1)
@@ -198,15 +198,22 @@ search_entry.grid(column=0, row=0, sticky='ew')
 search_submit_button.grid(column=1, row=0, sticky='ew')
 suggestions_frame.grid(column=2, row=1, columnspan=2, padx=8, pady=(0, 4), sticky='nesw')
 planner_frame.grid_columnconfigure(0, weight=1)
-planner_frame.grid(column=2, row=2, columnspan=2, padx=8, sticky='new')
+planner_frame.grid_rowconfigure(0, weight=1)
+planner_frame.grid_rowconfigure(1, weight=8)
+planner_frame.grid(column=2, row=2, columnspan=2, padx=8, sticky='nesw')
 current_date_label.grid(column=0, row=0, sticky='ew')
 planner_scrollable_frame.grid_columnconfigure(0, weight=1)
-planner_scrollable_frame.grid(column=0, row=1, sticky='ew')
-footer_frame.grid(column=0, row=10)
-leaderboard_button.grid(column=230, row=10)
-home_button.grid(column=460, row=10)
-recipe_button.grid(column=690, row=10)
-profile_button.grid(column=920, row=10)
+planner_scrollable_frame.grid(column=0, row=1, sticky='nesw')
+footer_frame.columnconfigure(0, weight=1)
+footer_frame.columnconfigure(1, weight=1)
+footer_frame.columnconfigure(2, weight=1)
+footer_frame.columnconfigure(3, weight=1)
+footer_frame.rowconfigure(0, weight=1)
+footer_frame.grid(column=0, row=3, columnspan=4, sticky='nesw')
+leaderboard_button.grid(column=0, row=0, sticky='ew')
+home_button.grid(column=1, row=0, sticky='ew')
+recipe_button.grid(column=2, row=0, sticky='ew')
+profile_button.grid(column=3, row=0, sticky='ew')
 
 change_month()
 change_day()
