@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 from thefuzz import process
 from typing import List
+from typing_extensions import Annotated
+import typer
+from rich import print
 
 merged = pd.read_csv("./csv/merged.csv").set_index("FoodDescription")
 nu_names = pd.read_csv("./csv/nu_name.csv").set_index("NutrientID")
@@ -20,6 +23,63 @@ food_fr_to_en = merged.reset_index().set_index("FoodDescriptionF")[
 food_en_to_fr = merged["FoodDescriptionF"].to_dict()
 comp_fr_to_en = nu_names.set_index("NutrientNameF")["NutrientName"].to_dict()
 comp_en_to_fr = nu_names.set_index("NutrientName")["NutrientNameF"].to_dict()
+cli = typer.Typer()
+
+
+@cli.command()
+def get_info(plan: list[str], age: Annotated[float, typer.Option()], female: Annotated[bool, typer.Option()], en: Annotated[bool, typer.Option()] = True, pregnant: Annotated[bool, typer.Option()] = False, lactating: Annotated[bool, typer.Option()] = False):
+    """Gets nutrients and percentage of official reference values from fuzzy input
+
+    Args:
+        nu_dict (dict): Output of get_nutrients()
+            {nutrient en name: (fr name, amount, unit)}
+
+        age: Floating point for infants
+
+        female: User's biological sex (not gender)
+
+        en: True for English IO, False for French IO
+
+        pregnant: Whether user is pregnant
+
+        lactating: Wheather user is lactating
+
+    Returns:
+        dict: general component daily intake
+            {nutrient name: (% of min, % of good, % of max)}
+
+        dict: component percentage in energy intake
+            {nutrient name: (E% - min, E% - max)}
+
+        values without data will return np.nan
+    """
+    plan_dict = {}
+    for i in range(0, len(plan), 2):
+        plan_dict[fuzzy_match(plan[i], en)[0]] = float(plan[i+1])
+    nutrients = get_nutrients(plan_dict)
+    print(f"Nutrients for {plan_dict}:")
+    print(nutrients)
+    daily_percent, energy_offsets = check_daily(
+        nutrients, age, female, en, pregnant, lactating)
+    print("Percent of nutrients in meal plan in (min, recommended, max) reference intakes:")
+    print(daily_percent)
+    print("Difference in nutrient / energy percent ratio of nutrients in meal plan and (min, max) reference values:")
+    print(energy_offsets)
+
+
+@cli.command()
+def search(st: str, en: Annotated[bool, typer.Option()] = True):
+    """Fuzzy match a food type from Canada's official database (cli frontend)
+
+    Args:
+        st (str): partial string you want to complete
+
+        en: True for English input, False for French input 
+
+    Returns:
+        List[str]: top ten completions in selected language, sorted descending based on likelihood
+    """
+    print(fuzzy_match(st, en))
 
 
 def fuzzy_match(st: str, en: bool = True) -> List[str]:
@@ -161,6 +221,9 @@ def get_nutrients(plan: dict, en=True) -> dict:
 
     return output
 
+
+if __name__ == "__main__":
+    cli()
 
 # print(check_daily(get_nutrients(
 #     {fuzzy_match("egg")[0]: 500, fuzzy_match("eggplant")[0]: 500, fuzzy_match("bread")[0]: 500}), 25, True, True, False, True))
