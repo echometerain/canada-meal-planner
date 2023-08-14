@@ -108,22 +108,20 @@ def change_planner_focus(hf=None):
 
 def regenerate_planner(plans: dict):
     # fill planner_scrollable_frame with that days entries, or placeholder text if there are none.
-    global planner_selection
+    global planner_selection, planner_hour_name_var, planner_hour_name_entry
     planner_selection = None
     for planner_item in planner_scrollable_frame.grid_slaves():
         planner_item.grid_forget()
         planner_item.destroy()
     if not plans:
-        for i in range(0 if plans else 4):
-            hour_frame = ctk.CTkFrame(planner_scrollable_frame)
-            hour_frame.bind("<Button-1>", lambda e, hf=hour_frame: change_planner_focus(hf))
-            hour_frame.configure()
-            planner_hour_name_entry = ctk.CTkEntry(hour_frame, height=20, font=('', 11),
-                                                   placeholder_text='' if plans else default_planner_names[i])
+        hour_frame = ctk.CTkFrame(planner_scrollable_frame)
+        hour_frame.bind("<Button-1>", lambda e, hf=hour_frame: change_planner_focus(hf))
+        hour_frame.configure()
+        for i in range(4):
+            planner_hour_name_var = ctk.StringVar(value=f"{default_planner_names[i]}")
+            planner_hour_name_entry = ctk.CTkComboBox(hour_frame, height=20, font=('', 11), text_color=Colors.WHITE, fg_color=Colors.BLUE, button_color=Colors.BLUE, corner_radius=10, values=default_planner_names, variable=planner_hour_name_var)
             #planner_hour_food_entries = ctk.CTkTextbox(hour_frame, font=('', 11), state='disabled', wrap='word', activate_scrollbars=False)
             #planner_hour_food_entries.bind("<Button-1>", lambda e, hf=hour_frame: change_planner_focus(hf))
-            if i % 2:
-                hour_frame.configure(fg_color="#555555")
             hour_frame.columnconfigure(0, weight=1)
             hour_frame.rowconfigure(0, weight=1)
             #hour_frame.rowconfigure(1, weight=1)
