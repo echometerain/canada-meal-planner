@@ -83,13 +83,13 @@ def check_daily(nu_dict: dict, age: float, female: bool, en: bool = True, pregna
         max_diff = np.nan
         if "Min" in mgm.index:
             min_diff = convert_units(
-                nu_dict[e][2], mgm.at["Min", "Unit"], nu_dict[e][1]) - mgm.at["Min", ptype]
+                nu_dict[e][2], mgm.at["Min", "Unit"], nu_dict[e][1]) / mgm.at["Min", ptype]
         if "Good" in mgm.index:
             good_diff = convert_units(
-                nu_dict[e][2], mgm.at["Good", "Unit"], nu_dict[e][1]) - mgm.at["Good", ptype]
+                nu_dict[e][2], mgm.at["Good", "Unit"], nu_dict[e][1]) / mgm.at["Good", ptype]
         if "Max" in mgm.index:
             max_diff = convert_units(
-                nu_dict[e][2], mgm.at["Max", "Unit"], nu_dict[e][1]) - mgm.at["Max", ptype]
+                nu_dict[e][2], mgm.at["Max", "Unit"], nu_dict[e][1]) / mgm.at["Max", ptype]
         output[e] = (min_diff, good_diff, max_diff)
     for e in percent_e_n:
         mm = percent_e.loc[percent_e["Components"] == e].set_index("Type")
@@ -110,15 +110,18 @@ def convert_units(from_unit: str, to_unit: str, amount: np.double) -> np.double:
 
 def get_e_percent(energy: np.double, amount: np.double, kcal_type: str) -> np.double:
     if kcal_type == "Total Protein" or kcal_type == "Total Carbohydrate":
-        return amount*4/energy
+        return amount*4*100/energy
     elif kcal_type == "Total Fat":
-        return amount/energy
+        return amount*100/energy
 
 
 def get_nutrients(plan: dict, en=True) -> dict:
-    """
+    """Get total amount of nutrients for inputted foods
+
     Args:
         plan (dict): day plan {food name: amount in grams}
+
+        en: True for English input, False for French input 
 
     Returns:
         dict: {nutrient en name: (fr name, amount, unit)}
@@ -144,7 +147,7 @@ def get_nutrients(plan: dict, en=True) -> dict:
 
 
 # print(check_daily(get_nutrients(
-#     {fuzzy_match("fish")[0]: 5000}), 25, True, False, False, True))
+#     {fuzzy_match("egg")[0]: 500}), 25, True, True, False, True))
 # plan = {fuzzy_match("fish")[0]: 500}
 # print({food_en_to_fr[key]: val for key, val in plan.items()})
 
