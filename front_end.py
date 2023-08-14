@@ -20,9 +20,6 @@ user_data = json.load(open(user_data_dir))
 text_json = json.load(open(f'locales/{language_code}.json', encoding='utf-8'))
 default_planner_names = text_json['default planner names']
 
-page = "Home"
-
-
 class Colors(StrEnum):
     BLACK = "#231717"
     GREY = "#9CA2AE"
@@ -51,7 +48,6 @@ app.iconphoto(False, pi)
 app.minsize(800, 600)
 planner_selection = None
 
-
 def recipe_entered(search_term):
     if search_term == "":
         return False
@@ -62,7 +58,6 @@ def recipe_entered(search_term):
     print(f"for 100g of {food_item}")
     print(nutrients)
     print(percent_day)
-
 
 def change_planner_table(combo_option):
     for slave in planner_scrollable_frame.grid_slaves():
@@ -276,11 +271,13 @@ def generate_calendar():
 
 
 def generate_planner():
-    global planner_frame, current_date_label, planner_scrollable_frame, planner_combobox, planner_combobox_var
+    global planner_frame, current_date_label, planner_scrollable_frame, planner_combobox, planner_combobox_var, planner_weight, planner_serving_size
     planner_frame = ctk.CTkFrame(app)
     planner_combobox_var = ctk.StringVar(value='')
     planner_combobox = ctk.CTkComboBox(
-        planner_frame, variable=planner_combobox_var, command=change_planner_table)
+        planner_frame, variable=planner_combobox_var, font=('', 13), corner_radius=10, command=change_planner_table)
+    planner_weight = ctk.CTkEntry(planner_frame, placeholder_text="Weight (g)", border_width=0, font=('', 13), corner_radius=10)
+    planner_serving_size = ctk.CTkEntry(planner_frame, placeholder_text="Serving size (500g)", border_width=0, font=('', 13), corner_radius=10)
     current_date_label = ctk.CTkLabel(
         planner_frame, text=f"{month_lookup[month_current - 1]} {day_current}")
     planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
@@ -290,8 +287,10 @@ def generate_planner():
     planner_frame.grid_rowconfigure(2, weight=8)
     current_date_label.grid(column=0, row=0, sticky='ew')
     planner_combobox.grid(column=0, row=1, sticky='sew')
+    planner_weight.grid(column=0, row=3, sticky='sew')
+    planner_serving_size.grid(column=0, row=4, sticky='sew')
     planner_scrollable_frame.grid_columnconfigure(0, weight=1)
-    planner_scrollable_frame.grid(column=0, row=2, sticky='nesw')
+    planner_scrollable_frame.grid(column=0, row=5, sticky='nesw')
 
 
 def coming_soon():
