@@ -19,33 +19,50 @@ food_fr_to_en = merged.reset_index().set_index("FoodDescriptionF")[
     "FoodDescription"].to_dict()
 food_en_to_fr = merged["FoodDescriptionF"].to_dict()
 comp_fr_to_en = nu_names.set_index("NutrientNameF")["NutrientName"].to_dict()
-comp_fr_to_en = nu_names.set_index("NutrientName")["NutrientNameF"].to_dict()
+comp_en_to_fr = nu_names.set_index("NutrientName")["NutrientNameF"].to_dict()
 
 
-def fuzzy_match(st: str) -> List[str]:
-    """
+def fuzzy_match(st: str, en: bool = True) -> List[str]:
+    """Fuzzy match a food type from Canada's official database
+
     Args:
-        st (str): partial string you want to completes
+        st (str): partial string you want to complete
+
+        en: True for English input, False for French input 
 
     Returns:
-        List[str]: top ten completions, sorted descending based on likelihood
+        List[str]: top ten completions in selected language, sorted descending based on likelihood
     """
+    if en == False:
+        return [x[0] for x in process.extract(st, list(food_fr_to_en.keys()), limit=10)]
     return [x[0] for x in process.extract(st, merged.index, limit=10)]
 
 
-def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactating: bool) -> dict:
-    """
-    Args:
-        nu_dict (dict): output of get_nutrients()
+def check_daily(nu_dict: dict, age: float, female: bool, en: bool = True, pregnant: bool = False, lactating: bool = False) -> dict:
+    """Gets percentage of official reference values from nutrients
 
-        input sex not gender
+    Args:
+        nu_dict (dict): Output of get_nutrients()
+            {nutrient en name: (fr name, amount, unit)}
+
+        age: Floating point for infants
+
+        female: User's biological sex (not gender)
+
+        en: True for English OUTPUT, False for French OUTPUT
+
+        pregnant: Whether user is pregnant
+
+        lactating: Wheather user is lactating
 
     Returns:
-        dict: {nutrient name: (amount - min, amount - good, amount - max, units)} general component daily intake
+        dict: general component daily intake
+            {nutrient name: (% of min, % of good, % of max)}
 
-        dict: {nutrient name: (amount - min, amount - max)} component percent energy
+        dict: component percentage in energy intake
+            {nutrient name: (E% - min, E% - max)}
 
-        values without data will return NaN
+        values without data will return np.nan
     """
     comp_names = np.array(list(nu_dict.keys()))
     daily_n = np.intersect1d(comp_names, np.unique(daily["Components"]))
@@ -80,45 +97,53 @@ def check_daily(nu_dict: dict, age: float, female: bool, pregnant: bool, lactati
         good_diff = np.nan
         max_diff = np.nan
         if "Min" in mgm.index:
-            min_diff = convert_units(
-                nu_dict[e][2], mgm.at["Min", "Unit"], nu_dict[e][1]) - mgm.at["Min", ptype]
+            min_diff = _convert_units(
+                nu_dict[e][2], mgm.at["Min", "Unit"], nu_dict[e][1]) * 100 / mgm.at["Min", ptype]
         if "Good" in mgm.index:
-            good_diff = convert_units(
-                nu_dict[e][2], mgm.at["Good", "Unit"], nu_dict[e][1]) - mgm.at["Good", ptype]
+            good_diff = _convert_units(
+                nu_dict[e][2], mgm.at["Good", "Unit"], nu_dict[e][1]) * 100 / mgm.at["Good", ptype]
         if "Max" in mgm.index:
-            max_diff = convert_units(
-                nu_dict[e][2], mgm.at["Max", "Unit"], nu_dict[e][1]) - mgm.at["Max", ptype]
+            max_diff = _convert_units(
+                nu_dict[e][2], mgm.at["Max", "Unit"], nu_dict[e][1]) * 100 / mgm.at["Max", ptype]
         output[e] = (min_diff, good_diff, max_diff)
     for e in percent_e_n:
         mm = percent_e.loc[percent_e["Components"] == e].set_index("Type")
-        min_diff = get_e_percent(
+        min_diff = _get_e_percent(
             nu_dict["Energy"][1], nu_dict[e][1], e) - mm.at["Min", ptype]
-        max_diff = get_e_percent(
+        max_diff = _get_e_percent(
             nu_dict["Energy"][1], nu_dict[e][1], e) - mm.at["Max", ptype]
         output_pe[e] = (min_diff, max_diff)
 
+    if en == False:
+        return {comp_en_to_fr[k]: v for k, v in output.items()}, {comp_en_to_fr[k]: v for k, v in output_pe.items()}
     return output, output_pe
 
 
-def convert_units(from_unit: str, to_unit: str, amount: np.double) -> np.double:  # for check_daily only
+# for check_daily only
+def _convert_units(from_unit: str, to_unit: str, amount: np.double) -> np.double:
     return amount * units[to_unit] / units[from_unit]
 
 
-def get_e_percent(energy: np.double, amount: np.double, kcal_type: str) -> np.double:
+def _get_e_percent(energy: np.double, amount: np.double, kcal_type: str) -> np.double:
     if kcal_type == "Total Protein" or kcal_type == "Total Carbohydrate":
-        return amount*4/energy
+        return amount*4*100/energy
     elif kcal_type == "Total Fat":
-        return amount/energy
+        return amount*100/energy
 
 
-def get_nutrients(plan: dict) -> dict:
-    """
+def get_nutrients(plan: dict, en=True) -> dict:
+    """Get total amount of nutrients for inputted foods
+
     Args:
-        plan (dict): day plan {food name: amount in grams}
+        plan: Meal plan {food name: amount in grams}
+
+        en: True for English input, False for French input 
 
     Returns:
         dict: {nutrient en name: (fr name, amount, unit)}
     """
+    if en == False:
+        plan = {food_fr_to_en[k]: v for k, v in plan.items()}
     output = {}
     for k, v in plan.items():
         rows = nu_amounts.loc[nu_amounts.FoodID == merged.at[k, "FoodID"]]
@@ -137,5 +162,9 @@ def get_nutrients(plan: dict) -> dict:
     return output
 
 
-# print(check_daily(get_nutrients(
-#     {fuzzy_match("fish")[0]: 5000}), 25, True, False, True))
+print(check_daily(get_nutrients(
+    {fuzzy_match("egg")[0]: 500}), 25, True, True, False, True))
+# plan = {fuzzy_match("fish")[0]: 500}
+# print({food_en_to_fr[key]: val for key, val in plan.items()})
+
+# print(fuzzy_match("poisson", en=False))
