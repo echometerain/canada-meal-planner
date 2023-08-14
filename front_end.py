@@ -141,21 +141,17 @@ def change_day(day=day_current):
     regenerate_planner({})
 
 # Search Bar
-<<<<<<< Updated upstream
 def search():
     global search_frame, search_entry, search_submit_button
     search_frame = ctk.CTkFrame(app, height=40)
     search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..", fg_color='#FA5151', border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
     search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
-=======
-
-search_frame = ctk.CTkFrame(app, height=40)
-search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..",
+    search_frame = ctk.CTkFrame(app, height=40)
+    search_entry = ctk.CTkEntry(search_frame, placeholder_text="Search through Canada Meal Planner’s food catalogue..",
                             fg_color='#FA5151',
                             border_width=0, text_color='#FFFFFF', placeholder_text_color="#FFFFFF", font=('', 13))
-search_entry.bind("<Return>", lambda e: search_entered())
-search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
->>>>>>> Stashed changes
+    search_entry.bind("<Return>", lambda e: search_entered())
+    search_submit_button = ctk.CTkButton(search_frame, text="Search", command=search_entered)
 
 cmp_icon = ctk.CTkImage(Image.open(os.path.join("images/cmp64.png")), size=(64, 64))
 icon_label = ctk.CTkLabel(app, image=cmp_icon, text='')
@@ -213,47 +209,40 @@ def planner():
     planner_scrollable_frame = ctk.CTkScrollableFrame(planner_frame)
     calendar()
 
-# Footer
-<<<<<<< Updated upstream
-footer_frame = ctk.CTkFrame(app, height = 75)
-leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size = (76, 73)), command=leaderboard_page)
-home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size = (76, 73)), command=home_page)
-recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size = (76, 73)), command=recipe_page)
-profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size = (76, 73)), command=profile_page)
-
-def display_page():
-    if page == "Home":
+def display_page(page='home'):
+    if page == "home":
+        planner()
         search()
         suggestions()
-        planner()
+        app.grid_columnconfigure(0, weight=1)
+        app.grid_columnconfigure(1, weight=5)
+        app.grid_columnconfigure(2, weight=5)
+        app.grid_columnconfigure(3, weight=5)
+        app.grid_rowconfigure(0, weight=1)
+        app.grid_rowconfigure(1, weight=1)
+        app.grid_rowconfigure(2, weight=8)
+        app.grid_rowconfigure(3, weight=2)
 
-    elif page == "Recipe":
+    elif page == "recipe":
         print("recipe")
 
-    elif page == "Profile":
+    elif page == "profile":
         print("profile")
 
-    elif page == "Leaderboard":
+    elif page == "leaderboard":
         print("leaderboard")
 
 display_page()
-=======
-footer_frame = ctk.CTkFrame(app, height=75)
-leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size=(76, 73)))
-home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size=(76, 73)))
-recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size=(76, 73)))
-profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size=(76, 73)))
->>>>>>> Stashed changes
+
+# Footer
+footer_frame = ctk.CTkFrame(app)
+leaderboard_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/leaderboard.png"), size=(76, 73)), command=leaderboard_page)
+home_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/home.png"), size=(76, 73)), command=home_page)
+recipe_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/recipe.png"), size=(76, 73)), command=recipe_page)
+profile_button = ctk.CTkButton(footer_frame, text="", image=ctk.CTkImage(Image.open("images/profile.png"), size=(76, 73)), command=profile_page)
 
 # grid
-app.grid_columnconfigure(0, weight=1)
-app.grid_columnconfigure(1, weight=5)
-app.grid_columnconfigure(2, weight=5)
-app.grid_columnconfigure(3, weight=5)
-app.grid_rowconfigure(0, weight=1)
-app.grid_rowconfigure(1, weight=1)
-app.grid_rowconfigure(2, weight=8)
-app.grid_rowconfigure(3, weight=2)
+
 calendar_frame.rowconfigure(0, weight=1)
 calendar_frame.rowconfigure(1, weight=8)
 calendar_frame.columnconfigure(0, weight=1)
