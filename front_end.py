@@ -9,6 +9,7 @@ import json
 import random
 import configparser
 import back_end
+from rich import print
 
 config = configparser.ConfigParser()
 config.read('settings.ini')
@@ -292,17 +293,20 @@ def generate_planner():
     planner_scrollable_frame.grid_columnconfigure(0, weight=1)
     planner_scrollable_frame.grid(column=0, row=2, sticky='nesw')
 
+
 def coming_soon():
     global coming_soon_frame, coming_soon_label
-    emojis = ["🍇", "🍈", "🍊", "🍉", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🥑"]
+    emojis = ["🍇", "🍈", "🍊", "🍉", "🍋", "🍌", "🍍", "🥭",
+              "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🥑"]
     coming_soon_frame = ctk.CTkFrame(app)
     coming_soon_label = ctk.CTkLabel(coming_soon_frame, text=f"This page is currently under development. Please check again later. {random.choice(emojis)}", fg_color='#FA5151', text_color='#FFFFFF',
-                                 font=('', 13), corner_radius=10, anchor="w")
+                                     font=('', 13), corner_radius=10, anchor="w")
     coming_soon_frame.columnconfigure(0, weight=10)
     coming_soon_frame.columnconfigure(1, weight=1)
     coming_soon_frame.grid(
-    column=1, row=2, columnspan=3, padx=8, pady=8, sticky='ew')
+        column=1, row=2, columnspan=3, padx=8, pady=8, sticky='ew')
     coming_soon_label.grid(column=0, row=0, sticky='ew')
+
 
 def generate_footer():
     global footer_frame
