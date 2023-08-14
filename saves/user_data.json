@@ -1,4 +1,152 @@
 {
-  'user': {
-  }
+    "user": {
+        "dates": {
+            "August 14 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 11 2023": {
+                "d\u00e9jeuner": [
+                    "Meat loaf with tomato sauce, mashed potatoes and peas"
+                ],
+                "d\u00eener": [
+                    "Meat loaf with tomato sauce, mashed potatoes and peas"
+                ],
+                "casse-cro\u00fbte": [
+                    "Meat loaf with tomato sauce, mashed potatoes and peas"
+                ],
+                "souper": [
+                    "Meat loaf with tomato sauce, mashed potatoes and peas"
+                ]
+            },
+            "August 9 2023": {
+                "d\u00e9jeuner": [
+                    "Chop suey, with meat, canned",
+                    "Vinegar, distilled (white)"
+                ],
+                "d\u00eener": [
+                    "Chop suey, with meat, canned",
+                    "Vinegar, distilled (white)"
+                ],
+                "casse-cro\u00fbte": [
+                    "Chop suey, with meat, canned",
+                    "Vinegar, distilled (white)"
+                ],
+                "souper": [
+                    "Chop suey, with meat, canned",
+                    "Vinegar, distilled (white)"
+                ]
+            },
+            "August 12 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 10 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 3 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 2 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 4 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 19 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 18 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 17 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 26 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 27 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 25 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 16 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 23 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 24 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 13 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 20 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 21 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            },
+            "August 28 2023": {
+                "d\u00e9jeuner": [],
+                "d\u00eener": [],
+                "casse-cro\u00fbte": [],
+                "souper": []
+            }
+        }
+    }
 }
